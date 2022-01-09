@@ -5,6 +5,6 @@ import (
 	"testing"
 )
 
-func TestA(t *testing.T) {
-	log.Println("TestB running")
+func Test_main(t *testing.T) {
+	log.Println("Testing main init")
 }
