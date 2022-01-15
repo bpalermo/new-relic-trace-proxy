@@ -105,8 +105,32 @@ func TestHandler_ServeHTTP(t *testing.T) {
 }
 
 func TestHandler_New(t *testing.T) {
+	var healthy int32 = 1
 	k := "fake"
 	host := "host"
-	h := New(&k, &host, logrus.New())
+	h := New(&k, &host, &healthy, logrus.New())
 	assert.NotNil(t, h)
+}
+
+func TestHandler_healthz(t *testing.T) {
+	t.Run("healthy", func(t *testing.T) {
+		var healthy int32 = 1
+		h, r, w := newHealthyzHandler(&healthy)
+		h.ServeHTTP(w, r)
+		assert.Equal(t, http.StatusNoContent, w.Result().StatusCode)
+	})
+
+	t.Run("unhealthy", func(t *testing.T) {
+		var healthy int32 = 0
+		h, r, w := newHealthyzHandler(&healthy)
+		h.ServeHTTP(w, r)
+		assert.Equal(t, http.StatusServiceUnavailable, w.Result().StatusCode)
+	})
+}
+
+func newHealthyzHandler(healthy *int32) (http.Handler, *http.Request, *httptest.ResponseRecorder) {
+	h := healthz(healthy)
+	r := httptest.NewRequest(http.MethodGet, "/healthz", nil)
+	w := httptest.NewRecorder()
+	return h, r, w
 }

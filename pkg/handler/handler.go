@@ -6,11 +6,13 @@ import (
 	"github.com/sirupsen/logrus"
 	"io"
 	"net/http"
+	"sync/atomic"
 )
 
 type Handler struct {
 	ProxyClient Client
 	Logger      *logrus.Logger
+	Healthy     *int32
 }
 
 func (h *Handler) write(w http.ResponseWriter, status int, body []byte) {
@@ -61,8 +63,18 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	h.write(w, resp.StatusCode, buf.Bytes())
 }
 
-func New(apiKey *string, hostOverride *string, logger *logrus.Logger) *Handler {
-	return &Handler{
+func healthz(healthy *int32) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if atomic.LoadInt32(healthy) == 1 {
+			w.WriteHeader(http.StatusNoContent)
+			return
+		}
+		w.WriteHeader(http.StatusServiceUnavailable)
+	})
+}
+
+func New(apiKey *string, hostOverride *string, healthy *int32, logger *logrus.Logger) *http.ServeMux {
+	proxy := &Handler{
 		Logger: logger,
 		ProxyClient: &ProxyClient{
 			Logger:       logger,
@@ -71,4 +83,10 @@ func New(apiKey *string, hostOverride *string, logger *logrus.Logger) *Handler {
 			ApiKey:       *apiKey,
 		},
 	}
+
+	router := http.NewServeMux()
+	router.Handle("/", proxy)
+	router.Handle("/healthz", healthz(healthy))
+
+	return router
 }
