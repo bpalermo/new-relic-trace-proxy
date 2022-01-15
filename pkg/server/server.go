@@ -4,18 +4,26 @@ import (
 	"github.com/bpalermo/new-relic-trace-proxy/pkg/handler"
 	"github.com/sirupsen/logrus"
 	"net/http"
+	"time"
 )
 
 type Server struct {
 	*http.Server
 }
 
+var (
+	healthy int32
+)
+
 func NewServer(adr *string, apiKey *string, hostOverride *string, logger *logrus.Logger) Server {
-	h := handler.New(apiKey, hostOverride, logger)
+	h := handler.New(apiKey, hostOverride, &healthy, logger)
 	return Server{
 		&http.Server{
-			Addr:    *adr,
-			Handler: h,
+			Addr:         *adr,
+			Handler:      h,
+			ReadTimeout:  5 * time.Second,
+			WriteTimeout: 10 * time.Second,
+			IdleTimeout:  15 * time.Second,
 		},
 	}
 }
