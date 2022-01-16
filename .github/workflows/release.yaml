@@ -15,7 +15,7 @@ jobs:
   lint:
     name: lint
     runs-on: ubuntu-latest
-    if: github.event_name != 'release' && github.event.action != 'created'
+    if: startsWith(github.ref, 'refs/tags/') != true
     steps:
       -
         name: Checkout
@@ -34,7 +34,7 @@ jobs:
   golang-lint:
     name: golang-lint
     runs-on: ubuntu-latest
-    if: github.event_name != 'release' && github.event.action != 'created'
+    if: startsWith(github.ref, 'refs/tags/') != true
     steps:
       -
         uses: actions/checkout@v2
@@ -123,7 +123,7 @@ jobs:
         with:
           context: .
           platforms: linux/amd64,linux/arm64
-          push: ${{ github.event_name == 'release' && github.event.action == 'created' }}
+          push: ${{ startsWith(github.ref, 'refs/tags/') }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
