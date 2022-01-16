@@ -108,7 +108,7 @@ func TestHandler_New(t *testing.T) {
 	var healthy int32 = 1
 	k := "fake"
 	host := "host"
-	h := New(&k, &host, &healthy, logrus.New())
+	h := NewMux(&k, &host, &healthy, logrus.New())
 	assert.NotNil(t, h)
 }
 

@@ -10,12 +10,13 @@ import (
 )
 
 var (
-	logger *logrus.Logger
-
 	debug        = kingpin.Flag("verbose", "Enable additional logging, implies all the logger-* options").Short('v').Bool()
 	port         = kingpin.Flag("port", "Port to serve HTTP on").Default(fmt.Sprintf("%d", constants.DefaultPort)).Uint()
 	hostOverride = kingpin.Flag("host", "Host to proxy to").Default("").String()
 	apiKey       = kingpin.Flag("apiKey", "New Relic API key").String()
+
+	logger  *logrus.Logger
+	healthy int32
 )
 
 func init() {
@@ -30,5 +31,9 @@ func main() {
 	if *debug {
 		logger.SetLevel(logrus.DebugLevel)
 	}
-	logger.Fatal(server.NewServer(*port, apiKey, hostOverride, logger).Start())
+
+	srv := server.NewServer(*port, apiKey, hostOverride, &healthy, logger)
+	if err := srv.Start(); err != nil {
+		logger.WithError(err).Fatal("failed to start")
+	}
 }
