@@ -11,11 +11,11 @@ import (
 	"testing"
 )
 
-type MockHttp struct {
+type MockHTTP struct {
 	StatusCode int
 }
 
-func (c *MockHttp) Do(_ *http.Request) (*http.Response, error) {
+func (c *MockHTTP) Do(_ *http.Request) (*http.Response, error) {
 	r := ioutil.NopCloser(bytes.NewReader([]byte("fake")))
 
 	h := http.Header{}
@@ -28,10 +28,10 @@ func (c *MockHttp) Do(_ *http.Request) (*http.Response, error) {
 	}, nil
 }
 
-type MockBadHttp struct {
+type MockBadHTTP struct {
 }
 
-func (c *MockBadHttp) Do(_ *http.Request) (*http.Response, error) {
+func (c *MockBadHTTP) Do(_ *http.Request) (*http.Response, error) {
 	return nil, errors.New("bad request")
 }
 
@@ -52,11 +52,11 @@ func newHandler(statusCode int, overrideHost bool) (*http.Request, *httptest.Res
 	h := &Handler{
 		ProxyClient: &ProxyClient{
 			Logger: logger,
-			Client: &MockHttp{
+			Client: &MockHTTP{
 				StatusCode: statusCode,
 			},
 			HostOverride: hostOverride,
-			ApiKey:       apiKey,
+			APIKey:       apiKey,
 		},
 	}
 
@@ -73,7 +73,7 @@ func newBadHandler() (*http.Request, *httptest.ResponseRecorder, *Handler) {
 		Logger: logger,
 		ProxyClient: &ProxyClient{
 			Logger: logger,
-			Client: &MockBadHttp{},
+			Client: &MockBadHTTP{},
 		},
 	}
 }

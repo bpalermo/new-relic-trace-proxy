@@ -11,18 +11,16 @@ import (
 func TestServer_NewServer(t *testing.T) {
 	k := "fake"
 	h := "fake"
-	adr := ":45566"
 
-	srv := NewServer(&adr, &k, &h, logrus.New())
+	srv := NewServer(45566, &k, &h, logrus.New())
 	assert.NotNil(t, srv)
 }
 
 func TestServer_Start(t *testing.T) {
 	k := "fake"
 	h := "fake"
-	adr := ":45566"
 
-	srv := NewServer(&adr, &k, &h, logrus.New())
+	srv := NewServer(45566, &k, &h, logrus.New())
 	go func() {
 		time.Sleep(1 * time.Second)
 		_ = srv.Shutdown(context.Background())

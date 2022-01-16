@@ -3,6 +3,7 @@ package handler
 import (
 	"bytes"
 	"fmt"
+	"github.com/bpalermo/new-relic-trace-proxy/internal/constants"
 	"github.com/sirupsen/logrus"
 	"io"
 	"net/http"
@@ -80,13 +81,13 @@ func New(apiKey *string, hostOverride *string, healthy *int32, logger *logrus.Lo
 			Logger:       logger,
 			Client:       http.DefaultClient,
 			HostOverride: *hostOverride,
-			ApiKey:       *apiKey,
+			APIKey:       *apiKey,
 		},
 	}
 
 	router := http.NewServeMux()
 	router.Handle("/", proxy)
-	router.Handle("/healthz", healthz(healthy))
+	router.Handle(constants.HealthCheckPath, healthz(healthy))
 
 	return router
 }
