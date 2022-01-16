@@ -30,6 +30,7 @@ var hopHeaders = []string{
 	"Upgrade",
 }
 
+// Client proxy server HTTP client
 type Client interface {
 	Do(req *http.Request) (*http.Response, error)
 }
@@ -64,6 +65,7 @@ func (p *ProxyClient) addNewRelicHeaders(header http.Header) {
 	header.Add(dataFormatVersionHeaderName, dataFormatVersionHeaderValue)
 }
 
+// Do implement the proxy request handling
 func (p *ProxyClient) Do(req *http.Request) (*http.Response, error) {
 	proxyURL := *req.URL
 	if p.HostOverride != "" {
