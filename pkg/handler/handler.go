@@ -75,8 +75,8 @@ func healthz(healthy *int32) http.Handler {
 	})
 }
 
-// New create a new handler
-func New(apiKey *string, hostOverride *string, healthy *int32, logger *logrus.Logger) *http.ServeMux {
+// NewMux create a new handler
+func NewMux(apiKey *string, hostOverride *string, healthy *int32, logger *logrus.Logger) *http.ServeMux {
 	proxy := &Handler{
 		Logger: logger,
 		ProxyClient: &ProxyClient{
@@ -87,9 +87,9 @@ func New(apiKey *string, hostOverride *string, healthy *int32, logger *logrus.Lo
 		},
 	}
 
-	router := http.NewServeMux()
-	router.Handle("/", proxy)
-	router.Handle(constants.HealthCheckPath, healthz(healthy))
+	mux := http.NewServeMux()
+	mux.Handle(constants.HealthCheckPath, healthz(healthy))
+	mux.Handle("/", proxy)
 
-	return router
+	return mux
 }

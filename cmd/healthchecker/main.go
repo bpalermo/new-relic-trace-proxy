@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	url = flag.String("url", fmt.Sprintf("http:/localhost:%d%s", constants.DefaultPort, constants.HealthCheckPath), "server url to health check")
+	url = flag.String("url", fmt.Sprintf("http://localhost:%d%s", constants.DefaultPort, constants.HealthCheckPath), "server url to health check")
 )
 
 func makeRequest(url *string) error {
