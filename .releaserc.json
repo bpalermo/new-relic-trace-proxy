@@ -12,7 +12,7 @@
     "@semantic-release/github",
     {
       "path": "@semantic-release/exec",
-      "cmd": "./tools/new-release.sh ${nextRelease.version}"
+      "successCmd": "./tools/new-release.sh ${nextRelease.version}"
     }
   ]
 }
