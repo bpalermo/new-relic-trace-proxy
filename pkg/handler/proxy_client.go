@@ -39,7 +39,7 @@ type ProxyClient struct {
 	Client       Client
 	HostOverride string
 	Logger       *logrus.Logger
-	ApiKey       string
+	APIKey       string
 }
 
 func copyHeaderWithoutOverwrite(dst, src http.Header) {
@@ -59,7 +59,7 @@ func delHopHeaders(header http.Header) {
 }
 
 func (p *ProxyClient) addNewRelicHeaders(header http.Header) {
-	header.Add(apiKeyHeaderName, p.ApiKey)
+	header.Add(apiKeyHeaderName, p.APIKey)
 	header.Add(dataFormatHeaderName, dataFormatHeaderValue)
 	header.Add(dataFormatVersionHeaderName, dataFormatVersionHeaderValue)
 }

@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"github.com/bpalermo/new-relic-trace-proxy/pkg/handler"
 	"github.com/sirupsen/logrus"
 	"net/http"
@@ -15,11 +16,12 @@ var (
 	healthy int32
 )
 
-func NewServer(adr *string, apiKey *string, hostOverride *string, logger *logrus.Logger) Server {
+func NewServer(port uint, apiKey *string, hostOverride *string, logger *logrus.Logger) Server {
 	h := handler.New(apiKey, hostOverride, &healthy, logger)
+	addr := fmt.Sprintf(":%d", port)
 	return Server{
 		&http.Server{
-			Addr:         *adr,
+			Addr:         addr,
 			Handler:      h,
 			ReadTimeout:  5 * time.Second,
 			WriteTimeout: 10 * time.Second,

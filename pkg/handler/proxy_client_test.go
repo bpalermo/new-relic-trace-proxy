@@ -43,7 +43,7 @@ func TestAddNewRelicHeaders(t *testing.T) {
 	const apiKey = "test"
 
 	client := ProxyClient{
-		ApiKey: apiKey,
+		APIKey: apiKey,
 	}
 
 	actual := http.Header{}
