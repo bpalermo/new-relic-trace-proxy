@@ -56,7 +56,7 @@ jobs:
         with:
           images: |
             palermo/new-relic-trace-proxy
-            quay/palermo/new-relic-trace-proxy
+            quay.io/palermo/new-relic-trace-proxy
           tags: |
             type=sha,format=long,prefix=
             type=ref,event=tag
