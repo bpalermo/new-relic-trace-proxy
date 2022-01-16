@@ -1,6 +1,8 @@
 package constants
 
 const (
-	DefaultPort     uint   = 9001
+	// DefaultPort proxy server default listening port
+	DefaultPort uint = 9001
+	// HealthCheckPath proxy server health check endpoint
 	HealthCheckPath string = "/healthz"
 )

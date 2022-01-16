@@ -10,6 +10,7 @@ import (
 	"sync/atomic"
 )
 
+// Handler proxy server handler
 type Handler struct {
 	ProxyClient Client
 	Logger      *logrus.Logger
@@ -74,6 +75,7 @@ func healthz(healthy *int32) http.Handler {
 	})
 }
 
+// New create a new handler
 func New(apiKey *string, hostOverride *string, healthy *int32, logger *logrus.Logger) *http.ServeMux {
 	proxy := &Handler{
 		Logger: logger,

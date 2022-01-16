@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+// Server proxy server
 type Server struct {
 	*http.Server
 }
@@ -16,6 +17,7 @@ var (
 	healthy int32
 )
 
+// NewServer creates a server and handler
 func NewServer(port uint, apiKey *string, hostOverride *string, logger *logrus.Logger) Server {
 	h := handler.New(apiKey, hostOverride, &healthy, logger)
 	addr := fmt.Sprintf(":%d", port)
@@ -30,6 +32,7 @@ func NewServer(port uint, apiKey *string, hostOverride *string, logger *logrus.L
 	}
 }
 
+// Start starts the server
 func (s Server) Start() error {
 	if err := s.ListenAndServe(); err != http.ErrServerClosed {
 		return err
