@@ -99,8 +99,8 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: |
-            palermo/new-relic-trace-proxy
-            quay.io/palermo/new-relic-trace-proxy
+            palermo/nri-zipkin
+            quay.io/palermo/nri-zipkin
           tags: |
             type=sha,format=long,prefix=
             type=raw,value=${{steps.semantic_release.outputs.new_release}}
